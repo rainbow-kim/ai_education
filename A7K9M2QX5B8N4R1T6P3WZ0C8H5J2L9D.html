@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 홍보 프롬프트 생성기</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0f1f3d;
+      --navy2: #1b3263;
+      --orange: #ff6b1a;
+      --lime: #c6f432;
+      --bg: #f4f6fa;
+      --line: #dfe4ee;
+      --text: #1a2233;
+      --sub: #5b6578
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 18px
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      color: #fff;
+      padding: 34px 0 64px;
+      overflow: hidden;
+      position: relative
+    }
+
+    header:after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      top: -70px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 28px solid rgba(198, 244, 50, .16)
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--lime);
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 12px;
+      border-radius: 99px
+    }
+
+    h1 {
+      font-family: 'Black Han Sans', sans-serif;
+      font-weight: 400;
+      font-size: clamp(26px, 5vw, 40px);
+      margin: 12px 0 6px
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--lime)
+    }
+
+    header p {
+      margin: 0;
+      opacity: .85
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 18px rgba(15, 31, 61, .07);
+      margin-bottom: 18px
+    }
+
+    .lift {
+      margin-top: -44px;
+      position: relative;
+      z-index: 2
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      font-weight: 900;
+      margin: 0 0 12px
+    }
+
+    .title .n {
+      background: var(--orange);
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      font-size: 14px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px
+    }
+
+    .full {
+      grid-column: 1/-1
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 4px
+    }
+
+    .qhint {
+      font-weight: 500;
+      color: var(--sub);
+      font-size: 12px
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font: inherit;
+      font-size: 15px;
+      background: #fff;
+      color: var(--text)
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--orange)
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px
+    }
+
+    .chip {
+      border: 1.5px solid var(--line);
+      background: #fff;
+      border-radius: 99px;
+      padding: 6px 13px;
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text)
+    }
+
+    .chip.on {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff
+    }
+
+    .qs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 10px;
+      background: #f8fafd;
+      border: 1.5px dashed var(--line);
+      border-radius: 12px;
+      padding: 12px
+    }
+
+    .qs label {
+      font-size: 12.5px;
+      margin: 0 0 3px
+    }
+
+    .qs input {
+      font-size: 14px;
+      padding: 8px 10px
+    }
+
+    .qs .wide {
+      grid-column: 1/-1
+    }
+
+    .brand {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 12px
+    }
+
+    .sub {
+      background: #f8fafd;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 12px
+    }
+
+    .seg {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px
+    }
+
+    .seg button {
+      flex: 1;
+      border: 1.5px solid var(--line);
+      background: #fff;
+      border-radius: 9px;
+      padding: 7px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text)
+    }
+
+    .seg button.on {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy)
+    }
+
+    .logoRow {
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    .logoPrev {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      border: 1.5px dashed var(--line);
+      display: grid;
+      place-items: center;
+      background: #fff;
+      overflow: hidden;
+      flex: none;
+      font-size: 11px;
+      color: var(--sub);
+      text-align: center
+    }
+
+    .logoPrev img {
+      max-width: 100%;
+      max-height: 100%
+    }
+
+    .upl {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .upl input {
+      display: none
+    }
+
+    .note {
+      font-size: 12.5px;
+      color: var(--sub);
+      margin: 6px 0 0
+    }
+
+    .go {
+      border: 0;
+      background: var(--lime);
+      color: var(--navy);
+      border-radius: 9px;
+      padding: 8px 12px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer
+    }
+
+    .cols {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .col {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700
+    }
+
+    .col input[type=color] {
+      width: 42px;
+      height: 36px;
+      padding: 2px;
+      border-radius: 8px;
+      cursor: pointer
+    }
+
+    .col code {
+      font-size: 12px;
+      color: var(--sub);
+      font-weight: 500
+    }
+
+    .pal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px
+    }
+
+    .pal button {
+      border: 1.5px solid var(--line);
+      background: #fff;
+      border-radius: 99px;
+      padding: 4px 10px 4px 4px;
+      font: inherit;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text)
+    }
+
+    .pal i {
+      display: inline-flex;
+      border-radius: 99px;
+      overflow: hidden
+    }
+
+    .pal i b {
+      width: 12px;
+      height: 18px;
+      display: block
+    }
+
+    .tools {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap
+    }
+
+    .mini {
+      border: 0;
+      background: #eef1f7;
+      color: var(--navy);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px
+    }
+
+    .m {
+      border: 2px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 6px;
+      cursor: pointer;
+      font: inherit;
+      color: var(--text);
+      text-align: center
+    }
+
+    .m i {
+      display: block;
+      font-style: normal;
+      font-size: 26px;
+      line-height: 1.2
+    }
+
+    .m b {
+      display: block;
+      font-size: 14px
+    }
+
+    .m.on {
+      border-color: var(--orange);
+      background: #fff4ec
+    }
+
+    .opt {
+      margin-top: 14px;
+      font-size: 14px
+    }
+
+    .opt .line {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 10px
+    }
+
+    .opt select {
+      width: auto
+    }
+
+    .step {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(15, 31, 61, .06);
+      margin-bottom: 14px;
+      overflow: hidden;
+      border-left: 6px solid var(--navy)
+    }
+
+    .step.alt {
+      border-left-color: var(--orange)
+    }
+
+    .sh {
+      padding: 14px 18px;
+      background: #f8fafd
+    }
+
+    .sh h3 {
+      margin: 0;
+      font-size: 16px
+    }
+
+    .sh h3 small {
+      display: block;
+      font-weight: 500;
+      color: var(--sub);
+      font-size: 13px
+    }
+
+    .sn {
+      color: var(--orange);
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: 1px
+    }
+
+    .pr {
+      border-top: 1px solid var(--line)
+    }
+
+    .ph {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 18px 0;
+      gap: 8px
+    }
+
+    .ph b {
+      font-size: 13px;
+      color: var(--navy2)
+    }
+
+    .copy {
+      background: var(--lime);
+      color: var(--navy);
+      border: 0;
+      border-radius: 9px;
+      padding: 8px 16px;
+      font: inherit;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      margin-left: auto
+    }
+
+    pre {
+      margin: 0;
+      padding: 10px 18px 14px;
+      white-space: pre-wrap;
+      word-break: keep-all;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px;
+      max-height: 320px;
+      overflow: auto
+    }
+
+    .how {
+      padding: 12px 18px 16px;
+      border-top: 1px solid var(--line);
+      font-size: 14px
+    }
+
+    .how ol,
+    .how ul {
+      margin: 0;
+      padding-left: 20px
+    }
+
+    .how li {
+      margin: 3px 0
+    }
+
+    .how .thumb {
+      height: 40px;
+      vertical-align: middle;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      margin: 0 4px;
+      background: #fff
+    }
+
+    .sw {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      vertical-align: -2px;
+      border: 1px solid rgba(0, 0, 0, .15);
+      margin: 0 2px
+    }
+
+    .or {
+      text-align: center;
+      font-weight: 900;
+      color: var(--sub);
+      margin: -4px 0 10px;
+      font-size: 13px
+    }
+
+    .kw {
+      display: inline-block;
+      background: #fff4ec;
+      color: var(--orange);
+      border-radius: 6px;
+      padding: 0 8px;
+      margin: 2px;
+      font-size: 13px;
+      font-weight: 700
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translate(-50%, 90px);
+      background: var(--navy);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 99px;
+      transition: .25s;
+      z-index: 9
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0)
+    }
+
+    footer {
+      text-align: center;
+      color: var(--sub);
+      font-size: 12px;
+      padding: 10px 0 30px
+    }
+
+    @media(max-width:760px) {
+
+      .grid,
+      .brand {
+        grid-template-columns: 1fr
+      }
+
+      .qs {
+        grid-template-columns: 1fr
+      }
+
+      .menu {
+        grid-template-columns: repeat(4, 1fr)
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <span class="badge">SNS 홍보 실습</span>
+      <h1>AI로 <em>우리 가게 홍보</em> 한 번에</h1>
+      <p>① 칸 몇 개만 채우고 → ② 만들 것을 고르면 → ③ 순서대로 복사해서 붙여넣기만 하세요.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="card lift">
+      <p class="title"><span class="n">1</span>우리 가게 정보</p>
+      <div class="grid">
+        <div><label>가게 이름</label><input id="club" placeholder="콩나무 베이커리"></div>
+        <div><label>업종</label><input id="sport" placeholder="베이커리" list="sports">
+          <datalist id="sports">
+            <option>카페</option>
+            <option>베이커리</option>
+            <option>음식점</option>
+            <option>분식</option>
+            <option>반찬가게</option>
+            <option>정육점</option>
+            <option>꽃집</option>
+            <option>미용실</option>
+            <option>네일샵</option>
+            <option>피부관리실</option>
+            <option>필라테스·요가</option>
+            <option>공방</option>
+            <option>학원</option>
+            <option>옷가게</option>
+            <option>소품샵</option>
+            <option>펜션</option>
+            <option>세탁소</option>
+            <option>안경원</option>
+          </datalist>
+        </div>
+        <div><label>지역 (동네까지)</label><input id="region" placeholder="서울 관악구 신림동"></div>
+
+        <div class="full brand">
+          <div class="sub">
+            <label>우리 가게 로고</label>
+            <div class="seg" id="hasLogo"><button data-v="1">있어요</button><button class="on" data-v="0">없어요</button>
+            </div>
+            <div id="logoYes" style="display:none">
+              <div class="logoRow">
+                <div class="logoPrev" id="logoPrev">미리보기</div>
+                <div><label class="upl">📁 로고 파일 올리기<input type="file" id="logoFile" accept="image/*"></label>
+                  <p class="note">올리면 로고 색을 자동으로 뽑아 오른쪽 색에 넣어요</p>
+                </div>
+              </div>
+            </div>
+            <div id="logoNo">
+              <p class="note" style="margin:0 0 8px">로고가 없어도 괜찮아요. 몇 가지만 고르면 AI로 만들 수 있어요.</p>
+              <button class="go" id="goLogo">🛡️ 로고 먼저 만들기 →</button>
+            </div>
+          </div>
+          <div class="sub">
+            <label>가게 대표 색 <span class="qhint">— 눌러서 바꾸기</span></label>
+            <div class="cols">
+              <div class="col">메인 <input type="color" id="c1" value="#6b4423"><code id="c1t"></code></div>
+              <div class="col">서브 <input type="color" id="c2" value="#e9dcc5"><code id="c2t"></code></div>
+              <div class="col">포인트 <input type="color" id="c3" value="#ffffff"><code id="c3t"></code></div>
+            </div>
+            <div class="pal" id="pal"></div>
+            <label style="margin-top:8px;font-weight:500;font-size:13px;display:flex;gap:6px;align-items:center"><input
+                type="checkbox" id="useColor" checked style="width:auto"> 프롬프트에 이 색 넣기</label>
+          </div>
+        </div>
+
+        <div class="full"><label>홍보 목적</label>
+          <div class="chips" data-g="purpose">
+            <button class="chip on">신메뉴·신상품 출시</button><button class="chip">할인·이벤트</button><button
+              class="chip">오픈·리뉴얼</button><button class="chip">체험·클래스 모집</button><button class="chip">영업시간·휴무
+              안내</button><button class="chip">후기·단골 감사</button><button class="chip">시즌 인사</button>
+          </div>
+        </div>
+        <div class="full"><label>알리고 싶은 내용 <span class="qhint">— 아는 것만 적어도 돼요 (빈칸은 AI가 [ ]로 비워둬요)</span></label>
+          <div class="qs" id="qs"></div>
+        </div>
+        <div class="full"><label>분위기 <span class="qhint">— 여러 개 골라도 돼요</span></label>
+          <div class="chips" data-g="tone" data-multi>
+            <button class="chip on">따뜻한 감성</button><button class="chip">밝고 친근한</button><button
+              class="chip">깔끔·전문적인</button><button class="chip">고급스러운</button><button
+              class="chip">귀여운·아기자기</button><button class="chip">내추럴·친환경</button><button class="chip">정겨운
+              동네가게</button><button class="chip">트렌디·힙한</button><button class="chip">레트로·빈티지</button><button
+              class="chip">미니멀·심플</button><button class="chip">가성비 강조</button><button class="chip">신뢰감
+              있는</button><button class="chip">청량·시원한</button><button class="chip">포근한 겨울</button><button
+              class="chip">축제·축하</button>
+          </div>
+        </div>
+      </div>
+      <div class="tools"><button class="mini" id="sample">✨ 예시로 채워보기</button><button class="mini" id="reset">↺
+          지우기</button></div>
+    </section>
+
+    <section class="card" id="menuCard">
+      <p class="title"><span class="n">2</span>무엇을 만들까요?</p>
+      <div class="menu" id="menu">
+        <button class="m on" data-t="card"><i>📱</i><b>카드뉴스</b></button>
+        <button class="m" data-t="poster"><i>🖼️</i><b>포스터</b></button>
+        <button class="m" data-t="banner"><i>🚩</i><b>배너</b></button>
+        <button class="m" data-t="hyun"><i>🎌</i><b>현수막</b></button>
+        <button class="m" data-t="logo"><i>🛡️</i><b>로고</b></button>
+        <button class="m" data-t="reels"><i>🎬</i><b>릴스·쇼츠</b></button>
+        <button class="m" data-t="cal"><i>🗓️</i><b>콘텐츠 캘린더</b></button>
+      </div>
+      <div class="opt" id="opt"></div>
+    </section>
+
+    <p class="title" style="margin:6px 4px 12px"><span class="n">3</span>순서대로 복사 → 붙여넣기</p>
+    <div id="steps"></div>
+  </div>
+  <footer> SNS 홍보 실습용</footer>
+  <div class="toast" id="toast">복사했어요! 붙여넣기 하세요</div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    let type = 'card', logoURL = '';
+    const SIZES = {
+      card: ['인스타 세로 1080×1350px', '인스타 정사각 1080×1080px'], poster: ['A4 세로 (전단지 겸용)', 'A3 세로', 'SNS 포스터 1080×1350px'],
+      banner: ['X배너 600×1800mm', '인스타 스토리 1080×1920px', '웹배너 1200×628px', '네이버 플레이스 사진 1:1'], hyun: ['가로 현수막 5000×900mm', '가로 현수막 3000×700mm', '세로 현수막 900×3000mm']
+    };
+    const NAME = { card: '카드뉴스', poster: '포스터', banner: '배너', hyun: '현수막' };
+    const PAL = [['네이비+연두', '#0f1f3d', '#c6f432', '#ffffff'], ['레드+화이트', '#d62828', '#ffffff', '#1d1d1d'], ['블루+옐로', '#1f4fd1', '#ffd23f', '#ffffff'],
+    ['블랙+골드', '#111111', '#d4af37', '#ffffff'], ['그린+화이트', '#1b7f3b', '#ffffff', '#f2c94c'], ['오렌지+네이비', '#ff6b1a', '#14213d', '#ffffff'],
+    ['베이지+브라운', '#e9dcc5', '#6b4423', '#ffffff'], ['크림+올리브', '#f6f1e1', '#6b7f3a', '#2b2b2b'], ['핑크+버건디', '#f7c6d0', '#7a1f3d', '#ffffff']];
+
+    const Q = {
+      '신메뉴·신상품 출시': [['name', '새 메뉴·상품 이름은?', '딸기 생크림 케이크', '겨울 한정 딸기 생크림 케이크'],
+      ['what', '어떤 점이 특별한가요?', '국산 딸기, 수제 생크림', '논산 딸기를 듬뿍, 매일 아침 만드는 수제 생크림'],
+      ['price', '가격은?', '28,000원', '1호 28,000원 / 조각 6,500원'],
+      ['date', '출시일·판매 기간은?', '12월 1일부터', '12월 1일 ~ 2월 말 (겨울 한정)'],
+      ['who', '누구에게 추천하나요?', '연말 파티, 선물', '연말 모임, 크리스마스 선물, 아이 생일'],
+      ['how', '주문·구매 방법은?', '매장, 네이버 예약', '매장 방문 / 네이버 예약 (2일 전)'],
+      ['contact', '위치·문의는?', '구월동 ○○로 12 / 032-000-0000', '구월동 ○○로 12, 1층 / 032-000-0000']],
+      '할인·이벤트': [['name', '이벤트 이름은?', '오픈 1주년 감사 이벤트', '오픈 1주년 감사 이벤트'],
+      ['benefit', '혜택은?', '전 메뉴 20% 할인', '전 메뉴 20% 할인 + 3만원 이상 구매 시 쿠키 증정'],
+      ['date', '기간은?', '11월 1일~7일', '11월 1일(토) ~ 7일(금)'],
+      ['who', '대상·조건은?', '누구나 / 리뷰 작성 시', '방문 손님 누구나, 리뷰 작성 시 추가 쿠폰'],
+      ['limit', '수량·주의사항은?', '선착순 100명', '선착순 100명, 다른 쿠폰과 중복 불가'],
+      ['how', '참여 방법은?', '매장 방문, 인스타 팔로우', '매장 방문 후 인스타 팔로우 화면 보여주기'],
+      ['contact', '위치·문의는?', '032-000-0000', '구월동 ○○로 12 / 032-000-0000']],
+      '오픈·리뉴얼': [['date', '오픈(리뉴얼) 날짜는?', '12월 5일(금)', '12월 5일(금) 오전 10시'],
+      ['what', '어떤 가게인가요?', '동네 수제 베이커리', '매일 굽는 동네 수제 베이커리'],
+      ['good', '우리 가게만의 자랑은?', '천연 발효종, 무첨가', '천연 발효종, 무첨가 건강빵, 넓은 주차장'],
+      ['benefit', '오픈 혜택은?', '첫 주 10% 할인', '오픈 첫 주 10% 할인 + 선착순 50명 식빵 증정'],
+      ['time', '영업시간·휴무는?', '10시~20시, 월 휴무', '오전 10시 ~ 오후 8시 / 매주 월요일 휴무'],
+      ['contact', '위치·문의는?', '구월동 ○○로 12', '구월동 ○○로 12, 1층 (구월역 3번 출구 도보 5분)']],
+      '체험·클래스 모집': [['name', '클래스 이름은?', '크리스마스 쿠키 만들기', '아이와 함께 크리스마스 쿠키 만들기'],
+      ['who', '누구 대상인가요?', '6세 이상 아이와 부모', '6~12세 아이와 보호자'],
+      ['date', '언제 하나요?', '12월 토요일 오후 2시', '12월 매주 토요일 오후 2시 (90분)'],
+      ['fee', '참가비는?', '1인 25,000원', '1팀(2인) 35,000원, 재료비 포함'],
+      ['what', '무엇을 하나요?', '쿠키 굽기, 아이싱', '반죽 → 모양 찍기 → 아이싱 꾸미기 → 포장해서 가져가기'],
+      ['limit', '정원·신청 방법은?', '회차당 6팀 / 네이버 예약', '회차당 6팀, 네이버 예약 선착순'],
+      ['contact', '문의처는?', '032-000-0000', '032-000-0000 / 인스타 DM']],
+      '영업시간·휴무 안내': [['what', '무엇을 알리나요?', '연말 휴무 / 영업시간 변경', '연말연시 휴무 안내'],
+      ['date', '기간·날짜는?', '12/31~1/2', '12월 31일 ~ 1월 2일 휴무'],
+      ['time', '바뀐(정상) 영업시간은?', '1월 3일부터 정상 영업', '1월 3일(토)부터 정상 영업, 오전 10시~오후 8시'],
+      ['reason', '이유·한마디는?', '재정비 후 더 좋은 모습으로', '재료 준비와 재정비 후 더 맛있게 돌아올게요'],
+      ['alt', '그동안 이용 방법은?', '온라인 주문 가능', '스마트스토어 주문은 휴무 중에도 가능']],
+      '후기·단골 감사': [['what', '어떤 소식인가요?', '리뷰 1000개 달성', '네이버 리뷰 1,000개 달성'],
+      ['review', '기억에 남는 손님 후기는?', '빵이 매일 기다려져요', '"아이가 매일 이 빵만 찾아요"'],
+      ['thanks', '감사 인사 한마디는?', '늘 찾아주셔서 감사해요', '늘 찾아주시는 이웃분들 덕분에 여기까지 왔어요'],
+      ['benefit', '감사 이벤트가 있나요?', '리뷰 이벤트', '이번 주 리뷰 작성 시 음료 1잔 무료'],
+      ['contact', '위치·문의는?', '032-000-0000', '구월동 ○○로 12 / 032-000-0000']],
+      '시즌 인사': [['season', '어떤 시즌인가요?', '새해 / 설날 / 크리스마스', '크리스마스'],
+      ['msg', '전하고 싶은 말은?', '따뜻한 연말 보내세요', '올 한 해 함께해 주셔서 감사해요, 따뜻한 연말 보내세요'],
+      ['best', '올해 한 줄 돌아보기는?', '단골 손님이 늘었어요', '동네 단골 손님이 두 배로 늘었어요'],
+      ['schedule', '휴무·운영 일정은?', '12/25 휴무', '12월 25일 휴무, 24일은 오후 9시까지 연장 영업'],
+      ['event', '함께 알릴 이벤트는?', '시즌 한정 메뉴', '크리스마스 케이크 사전 예약 중']]
+    };
+    const SHORT = { name: '이름', what: '내용', price: '가격', date: '날짜·기간', who: '대상', how: '방법', contact: '위치·문의', benefit: '혜택', limit: '수량·정원·주의', good: '자랑할 점', time: '영업·운영 시간', fee: '참가비', reason: '한마디', alt: '그동안 이용 방법', review: '손님 후기', thanks: '감사 인사', season: '시즌', msg: '전할 말', best: '올해 돌아보기', schedule: '휴무·운영 일정', event: '이벤트', etc: '기타' };
+    let ANS = {};
+    let REEL = { len: '30초', fmt: '상품 소개' };
+    let LOGO = { shape: '원형 배지', sym: '대표 상품', symText: '', eng: '' };
+
+    const chip = g => [...document.querySelectorAll(`[data-g="${g}"] .chip.on`)].map(c => c.textContent).join(', ');
+    function setChip(g, v) { const vs = (v || '').split(', '); document.querySelectorAll(`[data-g="${g}"] .chip`).forEach(c => c.classList.toggle('on', vs.includes(c.textContent))) }
+    document.addEventListener('click', e => {
+      const c = e.target.closest('.chip'); if (!c) return; const g = c.parentElement;
+      if (g.hasAttribute('data-multi')) { c.classList.toggle('on'); if (!g.querySelector('.on')) c.classList.add('on'); }
+      else { g.querySelectorAll('.chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); }
+      if (g.dataset.g === 'purpose') drawQs();
+      if (g.dataset.g === 'lshape') LOGO.shape = chip('lshape');
+      if (g.dataset.g === 'lsym') LOGO.sym = chip('lsym');
+      if (g.dataset.g === 'rlen') REEL.len = chip('rlen');
+      if (g.dataset.g === 'rfmt') REEL.fmt = chip('rfmt');
+      update();
+    });
+    document.addEventListener('input', e => {
+      const k = e.target.dataset.k; if (k) { const p = chip('purpose'); (ANS[p] || (ANS[p] = {}))[k] = e.target.value; }
+      if (e.target.id === 'symText') LOGO.symText = e.target.value;
+      if (e.target.id === 'eng') LOGO.eng = e.target.value;
+      if (e.target.type === 'color') showHex();
+      if (e.target.type !== 'file') update();
+    });
+    document.addEventListener('change', e => { if (e.target.matches('select,#useColor')) update() });
+
+    function drawQs() {
+      const p = chip('purpose'), a = ANS[p] || {};
+      $('qs').innerHTML = Q[p].map(([k, l, ph]) => `<div><label>${l}</label><input data-k="${k}" placeholder="예) ${esc(ph)}" value="${esc(a[k] || '')}"></div>`).join('')
+        + `<div class="wide"><label>그 밖에 꼭 넣고 싶은 말</label><input data-k="etc" placeholder="예) 셔틀버스 운행, 주차 가능" value="${esc(a.etc || '')}"></div>`;
+    }
+    function memo() {
+      const p = chip('purpose'), a = ANS[p] || {};
+      return Q[p].concat([['etc']]).filter(([k]) => a[k] && a[k].trim()).map(([k]) => `${SHORT[k]}: ${a[k].trim()}`).join('\n');
+    }
+
+    $('hasLogo').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      [...$('hasLogo').children].forEach(x => x.classList.toggle('on', x === b));
+      $('logoYes').style.display = b.dataset.v === '1' ? '' : 'none'; $('logoNo').style.display = b.dataset.v === '1' ? 'none' : ''; update();
+    });
+    const hasLogo = () => $('hasLogo').querySelector('.on').dataset.v === '1';
+    $('goLogo').onclick = () => { document.querySelector('.m[data-t="logo"]').click(); $('menuCard').scrollIntoView({ behavior: 'smooth' }) };
+    $('logoFile').addEventListener('change', e => {
+      const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+      r.onload = () => {
+        logoURL = r.result; $('logoPrev').innerHTML = `<img src="${logoURL}" alt="로고">`;
+        const img = new Image(); img.onload = () => { pickColors(img); update() }; img.src = logoURL;
+      };
+      r.readAsDataURL(f);
+    });
+    function pickColors(img) {
+      try {
+        const c = document.createElement('canvas'), s = 64; c.width = c.height = s; const x = c.getContext('2d'); x.drawImage(img, 0, 0, s, s);
+        const d = x.getImageData(0, 0, s, s).data, cnt = {};
+        for (let i = 0; i < d.length; i += 4) {
+          if (d[i + 3] < 128) continue; const r = d[i], g = d[i + 1], b = d[i + 2];
+          if (r > 235 && g > 235 && b > 235) continue; const k = (r >> 4) + ',' + (g >> 4) + ',' + (b >> 4); cnt[k] = (cnt[k] || 0) + 1;
+        }
+        const top = Object.entries(cnt).sort((a, b) => b[1] - a[1]).map(([k]) => k.split(',').map(v => v * 16 + 8));
+        const pick = []; for (const t of top) { if (pick.every(p => Math.abs(p[0] - t[0]) + Math.abs(p[1] - t[1]) + Math.abs(p[2] - t[2]) > 90)) pick.push(t); if (pick.length === 3) break; }
+        while (pick.length < 3) pick.push([255, 255, 255]);
+        pick.forEach((p, i) => $('c' + (i + 1)).value = '#' + p.map(v => Math.min(255, v).toString(16).padStart(2, '0')).join('')); showHex();
+      } catch (e) { }
+    }
+    $('pal').innerHTML = PAL.map((p, i) => `<button data-i="${i}"><i>${p.slice(1).map(c => `<b style="background:${c}"></b>`).join('')}</i>${p[0]}</button>`).join('');
+    $('pal').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return; const p = PAL[b.dataset.i];
+      [1, 2, 3].forEach(i => $('c' + i).value = p[i]); showHex(); update();
+    });
+    function showHex() { [1, 2, 3].forEach(i => $('c' + i + 't').textContent = $('c' + i).value.toUpperCase()) }
+    const colors = () => [1, 2, 3].map(i => $('c' + i).value.toUpperCase());
+    const colorText = () => { if (!$('useColor').checked) return ''; const c = colors(); return `메인 ${c[0]}, 서브 ${c[1]}, 포인트 ${c[2]}` };
+    const swatch = () => colors().map(c => `<span class="sw" style="background:${c}"></span>${c}`).join(' ');
+
+    $('menu').addEventListener('click', e => {
+      const b = e.target.closest('.m'); if (!b) return;
+      document.querySelectorAll('.m').forEach(x => x.classList.remove('on')); b.classList.add('on'); type = b.dataset.t; drawOpt(); update();
+    });
+    function drawOpt() {
+      const o = $('opt');
+      if (SIZES[type]) o.innerHTML = `<div class="line"><span>규격</span><select id="size">${SIZES[type].map(s => `<option>${s}</option>`).join('')}</select></div>`;
+      else if (type === 'cal') {
+        const m = new Date().getMonth();
+        o.innerHTML = `<div class="line"><span>월</span><select id="month">${Array.from({ length: 12 }, (_, i) => `<option ${i === (m + 1) % 12 ? 'selected' : ''}>${i + 1}월</option>`).join('')}</select>
+    <span>· 인스타 주</span><select id="fi"><option>2</option><option selected>3</option><option>5</option></select><span>회 · 당근 주</span>
+    <select id="fd"><option selected>1</option><option>2</option></select><span>회 · 블로그 주</span><select id="fb"><option selected>1</option><option>2</option></select><span>회</span></div>`;
+      }
+      else if (type === 'reels') {
+        const lens = ['15초', '30초', '60초'], fmts = ['상품 소개', '만드는 과정', '비포·애프터', '사장님 하루(브이로그)', '손님 반응·후기', '꿀팁·정보', '언박싱·포장', '트렌드 따라하기'];
+        o.innerHTML = `<label>영상 길이</label><div class="chips" data-g="rlen">${lens.map(s => `<button class="chip ${REEL.len === s ? 'on' : ''}">${s}</button>`).join('')}</div>
+    <label style="margin-top:12px">영상 형식 <span class="qhint">— 하나 고르기</span></label>
+    <div class="chips" data-g="rfmt">${fmts.map(s => `<button class="chip ${REEL.fmt === s ? 'on' : ''}">${s}</button>`).join('')}</div>
+    <p class="note">얼굴이 안 나와도 괜찮아요. 손·상품·매장만 찍어도 충분해요.</p>`;
+      }
+      else if (type === 'logo') {
+        const shapes = ['원형 배지', '심볼+글자 가로형', '빈티지 엠블럼', '이니셜 모노그램', '마스코트 캐릭터', '글자형 워드마크', '미니멀 아이콘', '손그림 라인'];
+        const syms = ['대표 상품', '가게 도구', '동물·캐릭터', '꽃·잎·자연', '지역 명소·특징', '가게 건물·간판', '이니셜'];
+        o.innerHTML = `<label>로고 모양 <span class="qhint">— 하나 고르기</span></label>
+    <div class="chips" data-g="lshape">${shapes.map(s => `<button class="chip ${LOGO.shape === s ? 'on' : ''}">${s}</button>`).join('')}</div>
+    <label style="margin-top:12px">넣고 싶은 상징 <span class="qhint">— 여러 개 가능</span></label>
+    <div class="chips" data-g="lsym" data-multi>${syms.map(s => `<button class="chip ${LOGO.sym.split(', ').includes(s) ? 'on' : ''}">${s}</button>`).join('')}</div>
+    <div class="grid" style="margin-top:12px">
+      <div style="grid-column:span 2"><label>상징 자세히 (선택)</label><input id="symText" placeholder="예) 식빵, 밀 이삭, 고양이" value="${esc(LOGO.symText)}"></div>
+      <div><label>영문 이름·이니셜 (선택)</label><input id="eng" placeholder="예) JOEUN BAKERY / JB" value="${esc(LOGO.eng)}"></div>
+    </div>
+    <p class="note">로고 색은 위 <b>가게 대표 색</b>이 들어가요. 색이 없다면 추천 조합을 눌러 보세요.</p>`;
+      }
+      else o.innerHTML = '';
+    }
+
+    function D() {
+      return {
+        club: $('club').value.trim() || '우리 가게', sport: $('sport').value.trim() || '가게', region: $('region').value.trim(),
+        purpose: chip('purpose'), tone: chip('tone'), color: colorText(), memo: memo(), size: $('size') ? $('size').value : ''
+      }
+    }
+    const base = (d, noLogo) => `- 가게: ${d.club}\n- 업종: ${d.sport}${d.region ? `\n- 지역: ${d.region}` : ''}\n- 목적: ${d.purpose}\n- 분위기: ${d.tone}${d.color ? `\n- 가게 색: ${d.color}` : ''}${hasLogo() && !noLogo ? '\n- 로고: 있음 (로고 넣을 자리를 꼭 남겨줘)' : ''}${d.memo ? `\n[알릴 내용]\n${d.memo}` : ''}`;
+    const rule = `\n※ 내가 주지 않은 정보(날짜, 가격, 원산지, 효능 등)는 지어내지 말고 [ ]로 비워둬.`;
+    const logoHow = () => hasLogo()
+      ? `<li>로고 넣기: <b>업로드</b>에 로고 파일 올리기 ${logoURL ? `<img class="thumb" src="${logoURL}" alt="">` : ''} → 오른쪽 위나 아래 가운데에 배치</li>`
+      : `<li>로고가 없다면 위 메뉴 <b>🛡️ 로고</b>에서 먼저 만들어 두세요</li>`;
+    const colorHow = () => $('useColor').checked ? `<li>색 맞추기: 글자·도형 선택 → 색상 → <b>HEX 코드 입력</b> ${swatch()}</li>` : `<li>가게 색으로 제목·포인트 도형 색 통일</li>`;
+
+    function promo(d) {
+      const n = NAME[type];
+      const ask = {
+        card: `1. 표지 제목 3안 (15자 이내)\n2. 6장 구성표 — 장마다 [큰 제목 / 본문 2줄 / 넣을 그림]\n3. 마지막 장은 신청·문의 안내\n4. 인스타 캡션 + 해시태그 15개`,
+        poster: `1. 큰 제목 3안 (12자 이내)\n2. 작은 설명 문구 2안\n3. 일시·장소·대상·신청·문의를 짧게 정리\n4. 위·가운데·아래에 무엇을 둘지 배치 제안`,
+        banner: `1. 큰 제목 5안 (10자 이내, 2초 안에 읽히게)\n2. 보조 문구 2안\n3. 꼭 넣을 정보 3개만 골라줘`,
+        hyun: `1. 현수막 문구 5안 (15자 이내, 지나가며 3초 안에 읽히게)\n2. 보조 문구 2안\n3. 꼭 넣을 정보 2개만 (예: 기간, 연락처)\n4. 잘 보이는 글자색·바탕색 조합 2가지`
+      }[type];
+      const ratio = { card: '4:5 세로', poster: '3:4 세로', banner: d.size.includes('웹') ? '16:9 가로' : '9:16 세로', hyun: '5:1 아주 긴 가로' }[type];
+      const space = { card: '위쪽 1/3은 제목 넣을 자리로 비워줘', poster: '위아래에 글자 넣을 여백을 넉넉히', banner: '한쪽에 글자 넣을 여백을 남겨줘', hyun: '가운데는 큰 글씨가 들어가게 비우고, 상품 이미지는 양 끝에만' }[type];
+      const kw = { card: '가게 홍보 카드뉴스', poster: `${d.sport} 포스터`, banner: '이벤트 배너', hyun: { '오픈·리뉴얼': '오픈 현수막', '할인·이벤트': '할인 현수막' }[d.purpose] || '가게 현수막' }[type];
+      return [
+        {
+          t: 'AI에게 문구·구성 맡기기', s: 'ChatGPT · Claude · Gemini 채팅창에 붙여넣기', ps: [{
+            p:
+              `너는 동네 가게 홍보 전문가야. 손님 입장에서 끌리는 문구로 써줘. 아래 정보로 ${n}(${d.size}) 문구를 만들어줘. 나는 미리캔버스로 디자인할 거야.
+
+${base(d)}
+
+[만들어 줄 것]
+${ask}
+${rule}`
+          }]
+        },
+        {
+          t: '홍보용 이미지 만들기', s: '이미지 생성 AI에 붙여넣기 → 내 PC에 저장', ps: [{
+            p:
+              `${d.sport} 가게의 대표 상품과 매장 분위기가 보이는 사진, ${d.purpose} 홍보용.${(ANS[d.purpose] || {}).name ? `\n주인공: ${ANS[d.purpose].name}.` : ''}
+분위기: ${d.tone}. 잡지 광고 사진처럼 선명하고 매력적으로.${d.color ? `\n색감: ${d.color} 계열과 어울리게.` : ''}
+비율 ${ratio}. ${space}.
+글자·숫자·로고는 넣지 마.`}],
+          how: `<ul><li>실제 우리 가게·상품 사진이 있으면 그게 제일 좋아요 (AI 이미지가 실제와 너무 다르면 손님이 오해할 수 있어요)</li><li>손님 얼굴이 나오는 사진은 동의 확인</li><li>마음에 안 들면 "더 밝게"처럼 한 가지씩 고쳐달라고 하기</li></ul>`
+        },
+        {
+          t: '미리캔버스로 옮겨서 완성', s: '방법 A — 템플릿 + AI 문구·이미지', alt: 1, how:
+            `<ol><li>미리캔버스 → 새 디자인 → 규격 <b>${d.size}</b></li>
+<li>템플릿 검색: <span class="kw">${kw}</span><span class="kw">${esc(d.sport)}</span><span class="kw">${d.purpose}</span></li>
+<li>STEP 1 문구를 글상자에 붙여넣기 (서식 깨지면 <b>Ctrl+Shift+V</b>)</li>
+<li>STEP 2 이미지를 <b>업로드</b> → 템플릿 사진 위로 끌어놓기</li>
+${logoHow()}${colorHow()}</ol>`
+        },
+        { or: 1 },
+        {
+          t: '미리클로 한 번에 만들기', s: '방법 B — 미리캔버스 AI(미리클)에 붙여넣기', alt: 1, ps: [{
+            p:
+              `${d.region ? d.region + ' ' : ''}${d.club}의 ${d.purpose} ${n}. ${d.sport} 가게, ${d.tone} 분위기.${d.color ? ` 색상 ${d.color}.` : ''}${d.memo ? ' ' + d.memo.replace(/\n/g, ' / ') : ''}`
+          }],
+          how: `<ul><li>시안이 나오면 가장 비슷한 것 선택 → 문구는 STEP 1 결과로 바꾸기</li>${logoHow()}<li>미리클 메뉴 위치·글자 수 제한은 업데이트에 따라 달라질 수 있어요</li></ul>`
+        },
+        {
+          t: '마지막 확인', s: '올리기 전에 꼭!', how:
+            `<ul><li>날짜·요일·장소·금액·연락처 오타 (AI가 쓴 건 사람이 꼭 확인)</li><li>휴대폰 크기로 줄여도 글자가 읽히는지</li>
+<li>저장: SNS용 <b>PNG/JPG</b> · 인쇄용 <b>PDF(인쇄용)</b></li></ul>`}
+      ];
+    }
+
+    function logo(d) {
+      const L = LOGO, c = d.color || '2~3가지 색';
+      const symW = [L.sym, L.symText].filter(Boolean).join(' / ');
+      const symImg = (L.symText ? L.symText + ', ' : '') + L.sym.replace('대표 상품', `${d.sport} 대표 상품`).replace('가게 도구', `${d.sport} 도구`).replace('이니셜', `이니셜 ${L.eng || '[영문 이니셜]'}`);
+      const shapeImg = {
+        '빈티지 엠블럼': '오래된 가게 간판 느낌의 빈티지 엠블럼, 가운데에 상징, 아래쪽에 리본 띠 자리', '손그림 라인': '손으로 그린 듯한 가는 선의 라인 드로잉 로고, 여백 많게',
+        '원형 배지': '동그란 원형 배지, 안쪽에 상징, 테두리에 글자 넣을 둥근 띠 공간',
+        '심볼+글자 가로형': '왼쪽에 단순한 심볼, 오른쪽에 가게 이름이 들어갈 빈 공간이 있는 가로형 로고',
+        '이니셜 모노그램': `영문 이니셜 "${L.eng || '[이니셜]'}"을 굵고 멋지게 디자인한 모노그램 로고`,
+        '마스코트 캐릭터': `${d.sport} 가게를 상징하는 귀여운 마스코트 캐릭터 로고, 정면, 친근한 표정`,
+        '글자형 워드마크': `영문 "${L.eng || '[영문 이름]'}" 글자를 감각적으로 디자인한 워드마크 로고`,
+        '미니멀 아이콘': '아주 단순한 선과 면으로 된 미니멀 아이콘 로고, 작게 줄여도 알아볼 수 있게'
+      }[L.shape];
+      const textRule = /모노그램|워드마크/.test(L.shape) ? '영문 글자 외 다른 글자는 넣지 마.' : '글자는 넣지 마 (가게 이름은 나중에 직접 넣을게).';
+      return [
+        {
+          t: '로고 아이디어 받기', s: 'ChatGPT · Claude · Gemini에 붙여넣기', ps: [{
+            p:
+              `우리 가게 로고 아이디어를 3가지 제안해줘.
+
+${base(d, 1)}
+- 원하는 모양: ${L.shape}
+- 넣고 싶은 상징: ${symW || '추천해줘'}${L.eng ? `\n- 영문 이름·이니셜: ${L.eng}` : ''}
+
+[각 안마다]
+- 컨셉 이름과 의미 (한 줄)
+- 들어갈 상징과 배치
+- 색 조합 (위 가게 색을 우선 쓰고, 색 이름 + HEX 코드)
+- 이미지 생성 AI에 넣을 프롬프트 한 줄 (글자 없이)`}]
+        },
+        {
+          t: '로고 그림 만들기', s: '이미지 생성 AI에 붙여넣기 — 3가지 스타일 중 골라서 (여러 개 해봐도 좋아요)', ps: [
+            { l: '기본 — 깔끔한 평면', p: `${d.sport} 가게 로고. ${shapeImg}.\n상징: ${symImg}.\n분위기: ${d.tone}. 색: ${c}만 사용.\n평면 벡터 스타일, 굵고 깔끔한 선, 흰색 배경, 가운데 정렬, 정사각형.\n${textRule}\n유명 브랜드 로고와 비슷하지 않게.` },
+            { l: '버전 2 — 고급스러운 부티크', p: `${d.sport} 가게 로고. ${shapeImg}.\n상징: ${symImg}.\n고급 부티크 브랜드 느낌, 가는 선과 넉넉한 여백, 절제된 색.\n색: ${c}. 흰색 배경, 정사각형.\n${textRule}\n유명 브랜드 로고와 비슷하지 않게.` },
+            { l: '버전 3 — 귀엽고 친근한', p: `${d.sport} 가게 로고. ${shapeImg}.\n상징: ${symImg}.\n귀엽고 친근한 둥근 일러스트 스타일, 부드러운 선, 동네 가게 느낌.\n색: ${c}. 흰색 배경, 정사각형.\n${textRule}` }],
+          how: `<ul><li>AI는 한글 글자를 자주 틀리게 써요 → <b>그림만</b> 만들고 가게 이름은 미리캔버스에서 직접 입력</li><li>"더 단순하게", "색을 2개로 줄여줘", "상징을 더 크게"처럼 한 가지씩 고치기</li></ul>`
+        },
+        {
+          t: '미리캔버스에서 완성', s: '방법 A — AI 그림 + 가게 이름 넣기', alt: 1, how:
+            `<ol><li>새 디자인 → 직접 입력 <b>1000×1000px</b></li>
+<li>STEP 2 그림 <b>업로드</b> → 필요하면 <b>배경 제거</b> 기능 사용</li>
+<li><b>${esc(d.club)}</b> 글자 입력 — 굵은 글꼴 1개만 (${L.shape === '원형 배지' ? '곡선 텍스트로 테두리 따라 배치' : L.shape === '빈티지 엠블럼' ? '아래 리본 띠 위에 배치' : '로고 옆이나 아래에 배치'})</li>
+${colorHow()}<li>요소 검색으로 꾸미기: <span class="kw">${esc(d.sport)} 아이콘</span><span class="kw">라인 일러스트</span><span class="kw">빈티지 배지</span><span class="kw">리본</span></li></ol>`
+        },
+        { or: 1 },
+        {
+          t: '미리클로 로고 시안 받기', s: '방법 B — 미리클에 붙여넣기', alt: 1, ps: [{ p: `${d.club} ${d.sport} 가게 로고, ${L.shape}, ${symW || d.sport + ' 대표 상품'} 상징, ${d.tone}${d.color ? `, 색상 ${d.color}` : ''}` }],
+          how: `<ul><li>시안 중 고른 뒤 글자·색을 직접 수정</li></ul>`
+        },
+        {
+          t: '저장하고 활용하기', s: '', how: `<ul><li>PNG로 저장 (투명 배경 저장은 요금제에 따라 다를 수 있어요)</li>
+<li><b>밝은 배경용</b>(진한 색 로고)·<b>어두운 배경용</b>(흰색 로고) 2가지로 만들어 두기</li>
+<li>완성되면 위 <b>우리 가게 로고 → 있어요</b>에 올리세요. 색이 자동으로 들어가고 홍보물 안내에도 나와요</li>
+<li>간판·포장지·명함 등에 쓰기 전에 비슷한 로고나 상표가 없는지 확인</li></ul>`}
+      ];
+    }
+
+
+    /* ---------- 릴스·쇼츠 ---------- */
+    function reels(d) {
+      const R = REEL, cuts = { '15초': '5~6', '30초': '8~10', '60초': '15~18' }[R.len];
+      return [
+        {
+          t: '릴스 기획안·콘티 받기', s: 'ChatGPT · Claude · Gemini에 붙여넣기', ps: [{
+            p:
+              `너는 동네 가게 인스타그램 릴스·유튜브 쇼츠 기획자야. 아래 정보로 ${R.len}짜리 세로 영상(9:16)을 기획해줘.
+
+${base(d)}
+- 영상 형식: ${R.fmt}
+- 촬영: 사장님 혼자 휴대폰으로 찍음 (얼굴은 안 나와도 됨)
+
+[만들어 줄 것]
+1. 첫 1~3초 훅(시선 잡는 첫 장면 + 자막) 3안
+2. 콘티 표 (${cuts}컷): 시간 | 화면(무엇을 어떻게 찍는지) | 화면 자막(10자 이내) | 소리·음악 분위기
+3. 마지막 장면: 방문·예약·저장을 부르는 한마디
+4. 커버(썸네일) 문구 3안
+5. 릴스 캡션 (3줄 이내) + 해시태그 10개 (${d.region || '동네'}·${d.sport}·상품 키워드)
+6. 같은 영상을 유튜브 쇼츠에 올릴 때 제목 2안
+${rule}`
+          }],
+          how: `<ul><li>훅 3안 중 하나 고르고, 콘티 표를 휴대폰 메모에 붙여두고 촬영하세요</li></ul>`
+        },
+        {
+          t: '휴대폰으로 촬영하기', s: '콘티 순서대로 찍기', alt: 1, how:
+            `<ol><li>휴대폰 <b>세로</b>로, 카메라 렌즈 한 번 닦기</li>
+<li>창가·밝은 조명 아래에서, 손·상품은 <b>가까이(클로즈업)</b></li>
+<li>한 장면당 <b>3~5초</b>씩 넉넉히 — 편집할 때 잘라 쓰면 돼요</li>
+<li>움직임 넣기: 포장 풀기, 칼로 자르기, 붓기, 손으로 들어 보여주기</li>
+<li>소리가 좋은 장면(굽는 소리, 따르는 소리)은 원본 소리도 살려두기</li>
+<li>손님 얼굴·차량 번호판이 나오면 동의 받거나 가리기</li></ol>`},
+        {
+          t: '부족한 장면은 AI로 (선택)', s: '이미지·영상 생성 AI에 붙여넣기', ps: [{
+            p:
+              `세로 9:16, ${d.sport} 가게의 ${(ANS[d.purpose] || {}).name || '대표 상품'} 클로즈업 장면.
+${d.tone} 분위기, 따뜻한 자연광, 천천히 다가가는 카메라 움직임.
+실제 촬영한 것처럼 자연스럽게. 글자·로고는 넣지 마.`}],
+          how: `<ul><li>메인 상품은 실제 사진·영상이 좋아요 (실제와 다르면 손님이 오해할 수 있어요)</li><li>AI 영상은 배경·분위기 컷으로만 쓰는 걸 추천해요</li></ul>`
+        },
+        {
+          t: '편집하기', s: '캡컷(CapCut) 또는 미리캔버스 동영상', alt: 1, how:
+            `<ol><li><b>캡컷</b>: 새 프로젝트 → 찍은 영상 순서대로 넣기 → 비율 <b>9:16</b></li>
+<li>콘티의 <b>화면 자막</b> 넣기 (자동 캡션 기능을 쓰면 말소리가 자막으로 바뀌어요)</li>
+<li>장면당 1~3초로 짧게 자르기 — 첫 장면이 제일 중요해요</li>
+<li>${hasLogo() ? '마지막 장면에 로고와 위치·영업시간 넣기' : '마지막 장면에 가게 이름·위치·영업시간 넣기'} ${$('useColor').checked ? `(자막 색 ${swatch()})` : ''}</li>
+<li>또는 <b>미리캔버스</b> → 동영상 템플릿에서 <span class="kw">릴스</span><span class="kw">쇼츠</span><span class="kw">${esc(d.sport)}</span> 검색 → 내 영상으로 교체</li>
+<li>커버 이미지는 STEP 1의 커버 문구로 미리캔버스에서 1080×1920px로 만들기</li></ol>`},
+        {
+          t: '올리기 전 확인', s: '', how: `<ul><li>음악: <b>인스타 앱 안의 음원</b>을 쓰세요 (비즈니스 계정은 쓸 수 있는 음원이 제한될 수 있어요)</li>
+<li>자막이 화면 아래쪽 버튼·캡션에 가리지 않는지</li><li>가격·날짜·위치 오타 확인</li>
+<li>인스타 릴스 + 유튜브 쇼츠 + 당근 소식에 같은 영상 재활용</li></ul>`}
+      ];
+    }
+
+    function cal(d) {
+      const m = $('month').value, fi = $('fi').value, fd = $('fd').value, fb = $('fb').value;
+      return [
+        {
+          t: '한 달 콘텐츠 캘린더 짜기', s: 'ChatGPT · Claude · Gemini에 붙여넣기', ps: [{
+            p:
+              `우리 가게의 ${m} 한 달 SNS 콘텐츠 캘린더를 표로 만들어줘.
+
+${base(d)}
+
+[채널과 횟수]
+- 인스타그램: 주 ${fi}회 (카드뉴스, 릴스, 상품 사진 섞어서)
+- 당근 비즈프로필 소식: 주 ${fd}회 (동네 주민 대상, 짧고 친근하게)
+- 네이버 블로그: 주 ${fb}회 (검색에 걸리는 정보성 글)
+
+[표 형식]
+날짜 | 요일 | 채널 | 주제 | 형식 | 한 줄 내용 | 준비물(사진·영상 등)
+
+[조건]
+- ${m}의 계절·기념일·동네 행사를 반영해줘
+- 같은 주제를 채널에 맞게 다르게 재활용해줘 (예: 블로그 글 → 인스타 카드뉴스 → 당근 소식)
+- 홍보만 하지 말고 만드는 과정, 손님 이야기, 사장님 꿀팁도 섞어줘
+- 마지막에 이번 달 핵심 메시지 한 줄
+${rule}`
+          }],
+          how: `<ul><li>나온 표를 드래그해 복사 → <b>구글 스프레드시트</b>나 <b>노션</b>에 붙여넣으면 캘린더 완성</li></ul>`
+        },
+        {
+          t: '인스타그램 글 쓰기', s: '캘린더에서 주제 하나 골라 [주제]만 바꿔 붙여넣기', ps: [{
+            p:
+              `${d.club}(${d.sport}) 인스타그램 게시물을 써줘.
+주제: [캘린더의 주제 붙여넣기]
+분위기: ${d.tone}
+
+1. 첫 줄 훅 3안 (피드에서 멈추게)
+2. 본문 5줄 이내, 이모지 적당히
+3. 마지막 줄 행동 유도 (방문·예약·프로필 링크 등)
+4. 해시태그 15개 (${d.region || '동네'}·${d.sport}·상품 키워드)
+5. 카드뉴스로 만들 경우 장별 문구 (5장)`}],
+          how: `<ul><li>이미지는 위 메뉴의 <b>카드뉴스</b>에서 만들기 → 미리캔버스로 완성</li></ul>`
+        },
+        {
+          t: '당근 소식 글 쓰기', s: '당근 비즈프로필 → 소식 쓰기', alt: 1, ps: [{
+            p:
+              `당근 비즈프로필에 올릴 ${d.club} 소식 글을 써줘.
+주제: [캘린더의 주제 붙여넣기]
+${d.memo ? `참고: ${d.memo.replace(/\n/g, ' / ')}\n` : ''}
+- 동네 이웃에게 말하듯 사장님 말투로 친근하게, 광고 느낌은 줄이기
+- 제목 1줄 (20자 이내) + 본문 5~7줄
+- ${d.region || '우리 동네'} 이웃이 공감할 내용으로 시작
+- 마지막에 위치·문의 방법 안내
+${rule}`
+          }],
+          how: `<ul><li>사진은 실제 상품·매장 사진 1~3장이 반응이 좋아요</li><li>할인 이벤트가 있다면 비즈프로필 쿠폰 기능도 함께 활용</li></ul>`
+        },
+        {
+          t: '블로그 글 쓰기', s: '네이버 블로그에 붙여넣기', alt: 1, ps: [{
+            p:
+              `네이버 블로그 글을 써줘.
+주제: [캘린더의 주제 붙여넣기]
+
+${base(d)}
+
+- 검색되는 제목 3안 (동네+업종+상품 키워드 포함, 예: "${d.region || '○○동'} ${d.sport} 추천 ...")
+- 소제목 4개로 나눈 본문 (1,500자 내외)
+- 손님이 궁금해할 질문 3개와 답 (가격·주차·예약 등 Q&A)
+- 사진 넣을 위치 표시: [사진: 설명]
+- 마지막에 신청·문의 안내와 태그 10개
+${rule}`
+          }]
+        },
+        {
+          t: '매주 작업 루틴', s: '한 번에 몰아서 하면 편해요', how:
+            `<ol><li><b>월</b> — 캘린더에서 이번 주 주제 확인, 상품·매장 사진·영상 찍기 (릴스 메뉴 활용)</li>
+<li><b>화</b> — 블로그 글 1개 작성 (STEP 4)</li>
+<li><b>수</b> — 블로그 글을 인스타 카드뉴스로 바꾸기 (STEP 2 + 미리캔버스)</li>
+<li><b>목</b> — 당근 소식 올리기 (STEP 3)</li>
+<li><b>금</b> — 댓글·DM 답변, 반응 좋았던 글 메모 → 다음 달 캘린더에 반영</li></ol>`}
+      ];
+    }
+
+    let cur = [];
+    function update() {
+      const d = D();
+      cur = type === 'logo' ? logo(d) : type === 'cal' ? cal(d) : type === 'reels' ? reels(d) : promo(d);
+      let n = 0;
+      $('steps').innerHTML = cur.map((s, i) => {
+        if (s.or) return '<p class="or">— 또는 —</p>';
+        n++;
+        const ps = (s.ps || []).map((x, j) => `<div class="pr"><div class="ph">${x.l ? `<b>${x.l}</b>` : ''}<button class="copy" data-i="${i}" data-j="${j}">복사하기</button></div><pre>${esc(x.p)}</pre></div>`).join('');
+        return `<div class="step ${s.alt ? 'alt' : ''}"><div class="sh"><h3><span class="sn">STEP ${n}</span><br>${s.t}${s.s ? `<small>${s.s}</small>` : ''}</h3></div>${ps}${s.how ? `<div class="how">${s.how}</div>` : ''}</div>`;
+      }).join('');
+      save();
+    }
+    $('steps').addEventListener('click', e => {
+      const b = e.target.closest('.copy'); if (!b) return; copy(cur[b.dataset.i].ps[b.dataset.j].p);
+      b.textContent = '복사됨 ✓'; setTimeout(() => b.textContent = '복사하기', 1500)
+    });
+    function copy(t) {
+      const ok = () => { $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1400) };
+      const fb = () => { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok() } catch (e) { } a.remove() };
+      try { navigator.clipboard.writeText(t).then(ok, fb) } catch (e) { fb() }
+    }
+
+    function save() {
+      try {
+        localStorage.setItem('sbp1', JSON.stringify({
+          club: $('club').value, sport: $('sport').value, region: $('region').value,
+          purpose: chip('purpose'), tone: chip('tone'), ans: ANS, logo: LOGO, cols: colors(), useColor: $('useColor').checked
+        }))
+      } catch (e) { }
+    }
+    function load(o) {
+      ['club', 'sport', 'region'].forEach(k => $(k).value = o[k] || ''); setChip('purpose', o.purpose || '신메뉴·신상품 출시'); setChip('tone', o.tone || '따뜻한 감성');
+      ANS = o.ans || {}; LOGO = o.logo || { shape: '원형 배지', sym: '대표 상품', symText: '', eng: '' };
+      (o.cols || ['#6B4423', '#E9DCC5', '#FFFFFF']).forEach((c, i) => $('c' + (i + 1)).value = c.toLowerCase()); $('useColor').checked = o.useColor !== false;
+      showHex(); drawQs(); drawOpt();
+    }
+    $('sample').onclick = () => {
+      const p = chip('purpose'), a = {}; Q[p].forEach(([k, , , s]) => a[k] = s); ANS[p] = a;
+      load({
+        club: $('club').value || '콩나무 베이커리', sport: $('sport').value || '베이커리', region: $('region').value || '서울 남동구 금은동',
+        purpose: p, tone: chip('tone'), ans: ANS, logo: Object.assign({}, LOGO, { symText: LOGO.symText || '식빵, 밀 이삭', eng: LOGO.eng || 'JOEUN BAKERY' }), cols: colors(), useColor: $('useColor').checked
+      }); update()
+    };
+    $('reset').onclick = () => { load({}); logoURL = ''; $('logoPrev').textContent = '미리보기'; update() };
+    try { const o = JSON.parse(localStorage.getItem('sbp1') || 'null'); load(o || {}) } catch (e) { load({}) }
+    update();
+  </script>
+</body>
+
+</html>
